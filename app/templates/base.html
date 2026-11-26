@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}smartdog 智能狗{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-amber-50 text-gray-800 min-h-screen flex flex-col">
+  <nav class="bg-white shadow sticky top-0 z-10">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-amber-600 flex items-center gap-2">
+        🐶 smartdog <span class="text-sm font-normal text-gray-500">智能狗</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="/" class="hover:text-amber-600">首页</a>
+        {% if current_user %}
+          <a href="/following" class="hover:text-amber-600">关注</a>
+          <a href="/posts/new" class="hover:text-amber-600">发布</a>
+          <a href="/users/{{ current_user.username }}" class="flex items-center gap-1.5 hover:text-amber-600">
+            {% if current_user.avatar %}
+              <img src="{{ current_user.avatar }}" class="w-6 h-6 rounded-full object-cover" alt="">
+            {% else %}
+              <span class="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-xs">🐾</span>
+            {% endif %}
+            {{ current_user.username }}
+          </a>
+          <form action="/auth/logout" method="post" class="inline m-0">
+            <button class="text-gray-500 hover:text-red-500">退出</button>
+          </form>
+        {% else %}
+          <a href="/auth/login" class="hover:text-amber-600">登录</a>
+          <a href="/auth/register" class="bg-amber-500 text-white px-3 py-1 rounded-full hover:bg-amber-600">注册</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="bg-white border-t text-center text-xs text-gray-400 py-4">
+    smartdog 智能狗 · 宠物主人们的交流社区
+  </footer>
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

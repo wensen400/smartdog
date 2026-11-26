@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}首页 · smartdog 智能狗{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold">宠物社区</h1>
+  <div class="flex gap-2 text-sm">
+    <a href="/?sort=latest" class="px-3 py-1 rounded-full {{ 'bg-amber-500 text-white' if sort == 'latest' else 'bg-white text-gray-600' }}">最新</a>
+    <a href="/?sort=hot" class="px-3 py-1 rounded-full {{ 'bg-amber-500 text-white' if sort == 'hot' else 'bg-white text-gray-600' }}">热门</a>
+  </div>
+</div>
+
+{% if posts %}
+  <div class="space-y-4">
+    {% for post in posts %}
+      {% include "_post_card.html" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="text-center py-20 text-gray-400">
+    <p class="text-5xl mb-4">🐾</p>
+    <p>还没有帖子，来发布第一条吧！</p>
+    {% if current_user %}
+      <a href="/posts/new" class="mt-4 inline-block bg-amber-500 text-white px-4 py-2 rounded-full">发布帖子</a>
+    {% else %}
+      <a href="/auth/register" class="mt-4 inline-block bg-amber-500 text-white px-4 py-2 rounded-full">注册加入</a>
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}

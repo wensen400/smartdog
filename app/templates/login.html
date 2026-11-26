@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}登录 · smartdog 智能狗{% endblock %}
+{% block content %}
+<div class="max-w-sm mx-auto mt-10">
+  <h1 class="text-2xl font-bold mb-4 text-center">登录</h1>
+  {% if errors %}
+    <div class="bg-red-50 text-red-600 rounded-xl p-3 mb-4 text-sm">{{ errors[0] }}</div>
+  {% endif %}
+  <form method="post" action="/auth/login" class="bg-white rounded-2xl shadow p-6 space-y-4">
+    <input type="hidden" name="next" value="{{ next or '' }}">
+    <div>
+      <label class="block text-sm font-medium mb-1">邮箱</label>
+      <input name="email" type="email" required value="{{ email or '' }}" class="w-full border rounded-xl px-3 py-2" placeholder="you@example.com">
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-1">密码</label>
+      <input name="password" type="password" required class="w-full border rounded-xl px-3 py-2">
+    </div>
+    <button class="w-full bg-amber-500 text-white py-2 rounded-full hover:bg-amber-600">登录</button>
+  </form>
+  <p class="text-sm text-center mt-3 text-gray-500">还没有账号？<a href="/auth/register" class="text-amber-600">注册</a></p>
+</div>
+{% endblock %}

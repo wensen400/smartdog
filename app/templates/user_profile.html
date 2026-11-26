@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.username }} · smartdog 智能狗{% endblock %}
+{% block content %}
+<div class="bg-white rounded-2xl shadow p-6">
+  <div class="flex items-start gap-4">
+    {% if profile_user.avatar %}
+      <img src="{{ profile_user.avatar }}" class="w-20 h-20 rounded-full object-cover" alt="">
+    {% else %}
+      <span class="w-20 h-20 rounded-full bg-amber-200 flex items-center justify-center text-4xl">🐾</span>
+    {% endif %}
+    <div class="flex-1">
+      <div class="flex items-center gap-3 flex-wrap">
+        <h1 class="text-2xl font-bold">{{ profile_user.username }}</h1>
+        {% if current_user and current_user.id != profile_user.id %}
+          <button
+            class="follow-btn text-sm px-4 py-1 rounded-full {{ 'bg-gray-200 text-gray-700' if is_following else 'bg-amber-500 text-white' }}"
+            data-username="{{ profile_user.username }}"
+            type="button"
+          >{{ '已关注' if is_following else '关注' }}</button>
+        {% endif %}
+        {% if current_user and current_user.id == profile_user.id %}
+          <a href="/users/{{ profile_user.username }}/edit" class="text-sm text-amber-600 hover:underline">编辑资料</a>
+        {% endif %}
+      </div>
+      <p class="text-sm text-gray-500 mt-1">{{ profile_user.email }}</p>
+      <p class="text-gray-600 mt-2">{{ profile_user.bio or '这个人很懒，什么都没写。' }}</p>
+      <div class="flex gap-4 mt-2 text-sm text-gray-500">
+        <span><b class="text-gray-800">{{ following_count }}</b> 关注</span>
+        <span><b class="text-gray-800">{{ follower_count }}</b> 粉丝</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="mt-6">
+  <h2 class="text-lg font-bold mb-3">🐾 宠物档案</h2>
+  {% if profile_user.pets %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {% for pet in profile_user.pets %}
+        <div class="bg-white rounded-2xl shadow p-4 text-center">
+          {% if pet.avatar %}
+            <img src="{{ pet.avatar }}" class="w-20 h-20 mx-auto rounded-full object-cover" alt="">
+          {% else %}
+            <div class="w-20 h-20 mx-auto rounded-full bg-amber-100 flex items-center justify-center text-4xl">🐶</div>
+          {% endif %}
+          <h3 class="font-semibold mt-2">{{ pet.name }}</h3>
+          <p class="text-xs text-gray-400">{{ pet.breed }}</p>
+          {% if pet.birthday %}<p class="text-xs text-gray-400">🎂 {{ pet.birthday }}</p>{% endif %}
+          {% if pet.bio %}<p class="text-sm text-gray-600 mt-1">{{ pet.bio }}</p>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-400 text-sm">还没有宠物档案。</p>
+  {% endif %}
+</section>
+
+<section class="mt-6">
+  <h2 class="text-lg font-bold mb-3">帖子</h2>
+  {% if posts %}
+    <div class="space-y-4">
+      {% for post in posts %}
+        {% include "_post_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-400 text-sm">还没有发布帖子。</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}编辑资料 · smartdog 智能狗{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">编辑资料</h1>
+{% if errors %}
+  <div class="bg-red-50 text-red-600 rounded-xl p-3 mb-4 text-sm">
+    <ul class="list-disc list-inside">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  </div>
+{% endif %}
+
+<form method="post" action="/users/{{ profile_user.username }}/edit" enctype="multipart/form-data" class="bg-white rounded-2xl shadow p-6 space-y-4">
+  <div>
+    <label class="block text-sm font-medium mb-1">头像</label>
+    <input type="file" name="avatar" accept="image/*" class="block text-sm">
+    {% if profile_user.avatar %}
+      <img src="{{ profile_user.avatar }}" class="w-16 h-16 rounded-full mt-2 object-cover" alt="">
+    {% endif %}
+  </div>
+  <div>
+    <label class="block text-sm font-medium mb-1">简介</label>
+    <textarea name="bio" rows="3" class="w-full border rounded-xl px-3 py-2" placeholder="介绍一下你自己...">{{ profile_user.bio or '' }}</textarea>
+  </div>
+  <button class="bg-amber-500 text-white px-6 py-2 rounded-full hover:bg-amber-600">保存</button>
+</form>
+
+<section class="mt-8">
+  <h2 class="text-lg font-bold mb-3">添加宠物</h2>
+  <form method="post" action="/users/{{ profile_user.username }}/pets" enctype="multipart/form-data" class="bg-white rounded-2xl shadow p-6 space-y-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">名字</label>
+        <input name="name" required class="w-full border rounded-xl px-3 py-2" placeholder="如：旺财">
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">品种</label>
+        <input name="breed" required class="w-full border rounded-xl px-3 py-2" placeholder="如：金毛、英短">
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">生日</label>
+        <input type="date" name="birthday" class="w-full border rounded-xl px-3 py-2">
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">头像</label>
+        <input type="file" name="avatar" accept="image/*" class="block text-sm">
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-1">简介</label>
+      <textarea name="bio" rows="2" class="w-full border rounded-xl px-3 py-2" placeholder="它的性格、爱好..."></textarea>
+    </div>
+    <button class="bg-amber-500 text-white px-6 py-2 rounded-full hover:bg-amber-600">添加宠物</button>
+  </form>
+
+  {% if profile_user.pets %}
+    <div class="mt-4 space-y-2">
+      {% for pet in profile_user.pets %}
+        <div class="flex items-center justify-between bg-white rounded-xl p-3">
+          <span class="text-sm">{{ pet.name }} · {{ pet.breed }}</span>
+          <form method="post" action="/pets/{{ pet.id }}/delete" class="m-0" onsubmit="return confirm('删除该宠物档案？')">
+            <button class="text-red-500 text-sm hover:underline">删除</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

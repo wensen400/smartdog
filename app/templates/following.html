@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}关注动态 · smartdog 智能狗{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">关注动态</h1>
+
+{% if posts %}
+  <div class="space-y-4">
+    {% for post in posts %}
+      {% include "_post_card.html" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="text-center py-20 text-gray-400">
+    <p class="text-5xl mb-4">👀</p>
+    <p>你还没有关注任何人，去首页发现有趣的主人吧。</p>
+    <a href="/" class="mt-4 inline-block bg-amber-500 text-white px-4 py-2 rounded-full">去逛逛</a>
+  </div>
+{% endif %}
+{% endblock %}
